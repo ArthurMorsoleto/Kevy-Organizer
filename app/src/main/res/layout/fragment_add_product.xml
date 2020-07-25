@@ -8,7 +8,7 @@
 
     <ImageView
         android:id="@+id/ivProduct"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/size_0"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
@@ -34,34 +34,44 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_16"
-        android:hint="Digite o preço"
+        android:hint="@string/product_price"
         android:inputType="number|numberDecimal"
+        app:layout_constraintBottom_toTopOf="@+id/edtProductDescription"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtProductName" />
 
     <EditText
         android:id="@+id/edtProductDescription"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/size_0"
         android:layout_margin="@dimen/margin_16"
+        android:gravity="top|left"
         android:hint="@string/product_description"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nbpAmmount" />
+        app:layout_constraintTop_toBottomOf="@+id/npProductAmount" />
 
     <NumberPicker
-        android:id="@+id/nbpAmmount"
+        android:id="@+id/npProductAmount"
+        android:layout_width="@dimen/size_80"
+        android:layout_height="@dimen/size_120"
+        android:layout_margin="@dimen/margin_16"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtProductName" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_16"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/edtProductPrice"
-        app:layout_constraintTop_toBottomOf="@+id/edtProductName" />
+        android:text="Quantidade"
+        app:layout_constraintBottom_toBottomOf="@+id/npProductAmount"
+        app:layout_constraintEnd_toStartOf="@+id/npProductAmount"
+        app:layout_constraintTop_toTopOf="@+id/npProductAmount" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btSaveProduct"
+        android:id="@+id/btnSaveProduct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_16"

@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name">Kevy Organizer</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="product_name">Nome do Produto</string>
     <string name="product_description">Descrição</string>
+    <string name="product_price">Digite o preço</string>
 </resources>
