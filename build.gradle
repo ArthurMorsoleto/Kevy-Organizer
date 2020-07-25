@@ -7,6 +7,9 @@ buildscript {
     ext.glide_version = "4.8.0"
     ext.nav_version = "2.1.0"
     ext.daggerVersion = '2.14.1'
+    ext.lifecycle = '1.1.1'
+    ext.fotoapparat='2.7.0'
+
     repositories {
         google()
         jcenter()
