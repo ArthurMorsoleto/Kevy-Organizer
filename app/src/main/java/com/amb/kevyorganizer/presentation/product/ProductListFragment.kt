@@ -1,4 +1,4 @@
-package com.amb.kevyorganizer.kevy.product
+package com.amb.kevyorganizer.presentation.product
 
 import android.os.Bundle
 import android.view.LayoutInflater

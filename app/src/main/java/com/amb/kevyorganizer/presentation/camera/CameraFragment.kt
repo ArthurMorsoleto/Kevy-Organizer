@@ -1,4 +1,4 @@
-package com.amb.kevyorganizer.kevy.camera
+package com.amb.kevyorganizer.presentation.camera
 
 import android.os.Bundle
 import android.view.LayoutInflater

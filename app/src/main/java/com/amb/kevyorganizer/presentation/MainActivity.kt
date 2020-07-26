@@ -1,4 +1,4 @@
-package com.amb.kevyorganizer.kevy
+package com.amb.kevyorganizer.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
