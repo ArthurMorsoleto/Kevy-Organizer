@@ -1,7 +1,8 @@
-package com.amb.kevyorganizer
+package com.amb.kevyorganizer.kevy
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.amb.kevyorganizer.R
 
 class MainActivity : AppCompatActivity() {
 
@@ -9,4 +10,5 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
     }
+
 }

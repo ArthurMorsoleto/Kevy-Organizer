@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Kevy Organizer</string>
+
+    <string name="product_name">Nome do Produto</string>
+    <string name="product_description">Descrição</string>
+    <string name="product_price">Digite o preço</string>
 </resources>

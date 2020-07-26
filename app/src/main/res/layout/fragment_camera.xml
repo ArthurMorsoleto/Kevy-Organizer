@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cameraRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.amb.camera.KevyCameraView
-        android:id="@+id/ambCameraView"
+        android:id="@+id/kevyCameraView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toTopOf="parent"
@@ -19,9 +20,9 @@
         android:layout_height="54dp"
         android:layout_margin="16dp"
         android:src="@drawable/ic_camera_capture"
-        app:layout_constraintBottom_toBottomOf="@+id/ambCameraView"
+        app:layout_constraintBottom_toBottomOf="@+id/kevyCameraView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/ambCameraView" />
+        app:layout_constraintStart_toStartOf="@+id/kevyCameraView" />
 
     <ImageView
         android:id="@+id/preview"
@@ -29,6 +30,6 @@
         android:layout_height="50dp"
         android:layout_margin="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/ambCameraView" />
+        app:layout_constraintTop_toTopOf="@+id/kevyCameraView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
