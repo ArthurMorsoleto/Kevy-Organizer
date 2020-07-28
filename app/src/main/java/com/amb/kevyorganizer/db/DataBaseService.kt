@@ -15,15 +15,13 @@ abstract class DataBaseService : RoomDatabase() {
         private var instance: DataBaseService? = null
 
         private fun create(context: Context): DataBaseService =
-            Room.databaseBuilder(context, DataBaseService::class.java,
+            Room.databaseBuilder(
+                context, DataBaseService::class.java,
                 DATABASE_NAME
-            )
-                .fallbackToDestructiveMigration()
-                .build()
+            ).fallbackToDestructiveMigration().build()
 
         fun getInstance(context: Context): DataBaseService =
-            (instance
-                ?: create(context)).also { instance = it }
+            (instance ?: create(context)).also { instance = it }
     }
 
     abstract fun productDao(): ProductDao
