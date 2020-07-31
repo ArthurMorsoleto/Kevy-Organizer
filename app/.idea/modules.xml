@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../Kevy Organizer.iml" filepath="$PROJECT_DIR$/../Kevy Organizer.iml" group="Kevy Organizer" />
+      <module fileurl="file://$PROJECT_DIR$/app.iml" filepath="$PROJECT_DIR$/app.iml" group="Kevy Organizer/app" />
+      <module fileurl="file://$PROJECT_DIR$/../camera/camera.iml" filepath="$PROJECT_DIR$/../camera/camera.iml" group="Kevy Organizer/camera" />
+      <module fileurl="file://$PROJECT_DIR$/../core/core.iml" filepath="$PROJECT_DIR$/../core/core.iml" group="Kevy Organizer/core" />
+    </modules>
+  </component>
+</project>
