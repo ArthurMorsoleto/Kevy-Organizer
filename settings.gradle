@@ -1,3 +1,4 @@
 rootProject.name='Kevy Organizer'
 include ':app'
 include ':core'
+include ':camera'

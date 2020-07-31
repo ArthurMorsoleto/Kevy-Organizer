@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/productListFragment">
+
+    <fragment
+        android:id="@+id/productListFragment"
+        android:name="com.amb.kevyorganizer.presentation.product.ProductListFragment"
+        android:label="fragment_product_list"
+        tools:layout="@layout/fragment_product_list">
+        <action
+            android:id="@+id/actionGoToProduct"
+            app:destination="@id/addProductFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addProductFragment"
+        android:name="com.amb.kevyorganizer.presentation.product.AddProductFragment"
+        android:label="fragment_add_product"
+        tools:layout="@layout/fragment_add_product">
+        <argument
+            android:name="productId"
+            android:defaultValue="0L"
+            app:argType="long" />
+        <argument
+            android:name="productImageFile"
+            android:defaultValue=" "
+            app:argType="string" />
+        <action
+            android:id="@+id/actionGoToCamera"
+            app:destination="@id/cameraFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.amb.kevyorganizer.presentation.camera.CameraFragment"
+        android:label="CameraFragment">
+        <action
+            android:id="@+id/actionGoToProduct"
+            app:destination="@id/addProductFragment">
+            <argument
+                android:name="productImageFile"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+</navigation>
