@@ -32,6 +32,8 @@ class ProductListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProviders.of(this).get(ProductListViewModel::class.java)
+        observeViewModel()
         initView()
     }
 
@@ -41,16 +43,19 @@ class ProductListFragment : Fragment() {
     }
 
     private fun initView() {
-        viewModel = ViewModelProviders.of(this).get(ProductListViewModel::class.java)
+        setupAddProductButton()
+        setupListView()
+    }
 
-        btnAddProduct.setOnClickListener { goToProductDetails() }
-
+    private fun setupListView() {
         productListView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = productListAdapter
         }
+    }
 
-        observeViewModel()
+    private fun setupAddProductButton() {
+        btnAddProduct.setOnClickListener { goToProductDetails() }
     }
 
     private fun observeViewModel() {

@@ -16,11 +16,13 @@ class ProductListViewModel(application: Application) : AndroidViewModel(applicat
     private val productRepository = ProductRepository(RoomProductDataSource(application))
     private val getAllProductsUseCase = GetAllProductsUseCase(productRepository)
 
-    val productsList = MutableLiveData<List<Product>>()
+    val productsList: MutableLiveData<List<Product>>
+        get() = _productsListLiveData
+    private val _productsListLiveData = MutableLiveData<List<Product>>()
 
     fun getAllProducts() {
         coroutineScope.launch {
-            productsList.postValue(getAllProductsUseCase())
+            _productsListLiveData.postValue(getAllProductsUseCase())
         }
     }
 }

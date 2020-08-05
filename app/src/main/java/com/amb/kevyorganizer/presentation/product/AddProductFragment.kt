@@ -34,7 +34,7 @@ class AddProductFragment : Fragment() {
     private val addProductRoot by lazy { view?.findViewById(R.id.addProductRoot) as ConstraintLayout }
     private val ivProduct by lazy { view?.findViewById(R.id.ivProduct) as ImageView }
     private val edtProductName by lazy { view?.findViewById(R.id.edtProductName) as EditText }
-    private val edtProductPrice by lazy { view?.findViewById(R.id.edtProductPrice) as EditText }
+    private val edtProductPrice by lazy { view?.findViewById(R.id.edtProductPrice) as EditText } //todo add currency mask
     private val npProductAmount by lazy { view?.findViewById(R.id.npProductAmount) as NumberPicker }
     private val btnSaveProduct by lazy { view?.findViewById(R.id.btnSaveProduct) as FloatingActionButton }
 
@@ -84,18 +84,28 @@ class AddProductFragment : Fragment() {
     }
 
     private fun initView() {
-        btnSaveProduct.setOnClickListener {
-            if (edtProductName.text.isNotEmpty() || edtProductPrice.text.isNotEmpty()) {
-                saveCurrentProduct()
-            } else {
-                popBackStack()
-            }
-        }
+        setupAmountNumberPicker()
+        setupImageView()
+        setupSaveProductButton()
+    }
+
+    private fun setupAmountNumberPicker() {
         npProductAmount.apply {
             minValue = 1
             maxValue = 100
             value = 1
         }
+    }
+
+    private fun setupSaveProductButton() {
+        btnSaveProduct.setOnClickListener {
+            if (edtProductName.text.isNotEmpty() && edtProductPrice.text.isNotEmpty()) {
+                saveCurrentProduct()
+            } //todo notify empty fields
+        }
+    }
+
+    private fun setupImageView() {
         ivProduct.apply {
             setOnClickListener {
                 if (checkCameraPermission()) {

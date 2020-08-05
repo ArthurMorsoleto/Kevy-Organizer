@@ -36,9 +36,9 @@ class ProductListAdapter(
 
         private val productLayout = view.productItemLayout
         private val productName = view.tvProductName
-        private val productImage = view.ivProductImage
+        private val productImage = view.ivProductImage //todo handle image
         private val productPrice = view.tvProducPrice
-        private val productAmount = view.tvProductAmount
+        private val productAmount = view.tvProductAmount //todo ajust layout
         private val productDate = view.tvProductDate
 
         fun bind(product: Product) {
@@ -46,7 +46,7 @@ class ProductListAdapter(
             productPrice.text = product.price.toString()
             productAmount.text = product.ammount.toString()
 
-            val sdf = SimpleDateFormat("dd MM, HH:mm:ss", Locale.getDefault())
+            val sdf = SimpleDateFormat("dd/MM, HH:mm:ss", Locale.getDefault())
             val resultDate = Date(product.updateTime)
             val lastUpdate = "Última atualização: ${sdf.format(resultDate)}" //TODO extract to string
             productDate.text = lastUpdate
