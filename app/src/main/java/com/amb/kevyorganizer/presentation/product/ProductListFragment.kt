@@ -5,15 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amb.kevyorganizer.R
+import com.amb.kevyorganizer.data.ProductListViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.fragment_product_list.*
 
 class ProductListFragment : Fragment() {
 
     private val productListView by lazy { view?.findViewById(R.id.productListView) as RecyclerView }
     private val btnAddProduct by lazy { view?.findViewById(R.id.btnAddProduct) as FloatingActionButton }
+
+    private val productListAdapter = ProductListAdapter(arrayListOf())
+    private lateinit var viewModel: ProductListViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,10 +35,30 @@ class ProductListFragment : Fragment() {
         initView()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getAllProducts()
+    }
+
     private fun initView() {
-        btnAddProduct.setOnClickListener {
-            goToProductDetails()
+        viewModel = ViewModelProviders.of(this).get(ProductListViewModel::class.java)
+
+        btnAddProduct.setOnClickListener { goToProductDetails() }
+
+        productListView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = productListAdapter
         }
+
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        viewModel.productsList.observe(this, Observer { list ->
+            loadingView.visibility = View.GONE
+            productListView.visibility = View.VISIBLE
+            productListAdapter.updateProducts(list.sortedBy { it.updateTime })
+        })
     }
 
     private fun goToProductDetails(id: Long = 0) {

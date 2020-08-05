@@ -23,7 +23,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.amb.core.data.Product
 import com.amb.kevyorganizer.R
-import com.amb.kevyorganizer.data.ProductViewModel
+import com.amb.kevyorganizer.data.AddProductViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
@@ -40,7 +40,8 @@ class AddProductFragment : Fragment() {
 
     private val args: AddProductFragmentArgs by navArgs()
 
-    private lateinit var viewModel: ProductViewModel
+    private lateinit var viewModel: AddProductViewModel
+
     private val currentProduct = Product(
         name = "",
         ammount = 0,
@@ -60,7 +61,7 @@ class AddProductFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(ProductViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(AddProductViewModel::class.java)
         observeViewModel()
         initView()
     }
