@@ -9,6 +9,7 @@ buildscript {
     ext.daggerVersion = '2.14.1'
     ext.lifecycle = '1.1.1'
     ext.fotoapparat='2.7.0'
+    ext.lottieVersion='3.4.1'
 
     repositories {
         google()
