@@ -1,7 +1,9 @@
 package com.amb.kevyorganizer.presentation.product
 
 import android.Manifest
+import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -13,6 +15,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.NumberPicker
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -35,14 +39,17 @@ class AddProductFragment : Fragment() {
     private val ivProduct by lazy { view?.findViewById(R.id.ivProduct) as ImageView }
     private val edtProductName by lazy { view?.findViewById(R.id.edtProductName) as EditText }
     private val edtProductPrice by lazy { view?.findViewById(R.id.edtProductPrice) as EditText } //todo add currency mask
+    private val edtProductDescription by lazy { view?.findViewById(R.id.edtProductDescription) as EditText }
     private val npProductAmount by lazy { view?.findViewById(R.id.npProductAmount) as NumberPicker }
     private val btnSaveProduct by lazy { view?.findViewById(R.id.btnSaveProduct) as FloatingActionButton }
+    private val ivProductImage by lazy { view?.findViewById(R.id.ivProductImage) as ImageView }
 
     private val args: AddProductFragmentArgs by navArgs()
 
     private lateinit var viewModel: AddProductViewModel
 
-    private val currentProduct = Product(
+    private var productId = 0L
+    private var currentProduct = Product(
         name = "",
         ammount = 0,
         price = 0.0,
@@ -63,6 +70,12 @@ class AddProductFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(AddProductViewModel::class.java)
         observeViewModel()
+        arguments?.let {
+            productId = AddProductFragmentArgs.fromBundle(it).productId
+            if (productId != 0L) {
+                viewModel.getProduct(productId)
+            }
+        }
         initView()
     }
 
@@ -76,6 +89,20 @@ class AddProductFragment : Fragment() {
                 showSnackBar("Algo deu errado")
             }
         })
+        viewModel.currentProduct.observe(this, Observer { product ->
+            product?.let {
+                currentProduct = product
+                bindCurrentProduct()
+            }
+        })
+    }
+
+    private fun bindCurrentProduct() {
+        edtProductName.setText(currentProduct.name, TextView.BufferType.EDITABLE)
+        edtProductPrice.setText(currentProduct.price.toString(), TextView.BufferType.EDITABLE)
+        edtProductDescription.setText(currentProduct.description, TextView.BufferType.EDITABLE)
+        ivProductImage.setImageBitmap(getBitmap(currentProduct.imageFilePath))
+        npProductAmount.value = currentProduct.ammount.toInt()
     }
 
     private fun hideKeyboard() {
@@ -87,6 +114,22 @@ class AddProductFragment : Fragment() {
         setupAmountNumberPicker()
         setupImageView()
         setupSaveProductButton()
+    }
+
+    private fun buildDeleteAlertDialog(context: Context) {
+        if (productId != 0L) {
+            AlertDialog.Builder(context)
+                .setTitle("Excluir Produto")
+                .setMessage("Tem certeza que deseja excluir o produto ${currentProduct.name}?")
+                .setPositiveButton("Sim") { dialog: DialogInterface?, i: Int -> deleteCurrentProduct() }
+                .setNegativeButton("Não") { dialog: DialogInterface?, _ -> }
+                .create()
+                .show()
+        }
+    }
+
+    private fun deleteCurrentProduct() {
+        viewModel.deleteProduct(currentProduct)
     }
 
     private fun setupAmountNumberPicker() {

@@ -25,10 +25,30 @@ class AddProductViewModel(application: Application) : AndroidViewModel(applicati
 
     val saved = MutableLiveData<Boolean>()
 
+    val currentProduct: MutableLiveData<Product?>
+        get() = _currentProduct
+    private val _currentProduct = MutableLiveData<Product?>()
+
     fun saveProduct(product: Product) {
         coroutineScope.launch {
             addProductUseCase(product)
             saved.postValue(true)
         }
     }
+
+    fun getProduct(id: Long) {
+        coroutineScope.launch {
+            val product = getProductUseCase(id)
+            _currentProduct.postValue(product)
+        }
+    }
+
+    fun deleteProduct(product: Product) {
+        coroutineScope.launch {
+            removeProductUseCase(product)
+            saved.postValue(true)
+        }
+
+    }
+
 }
