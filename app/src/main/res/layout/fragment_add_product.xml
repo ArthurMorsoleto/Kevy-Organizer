@@ -5,7 +5,7 @@
     android:id="@+id/addProductRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.product.AddProductFragment">
+    tools:context=".presentation.product.ProductDetailsFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -90,6 +90,15 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_16"
         android:src="@drawable/ic_save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnDeleteProduct" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnDeleteProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_16"
+        android:src="@drawable/ic_delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

@@ -11,7 +11,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class ProductListAdapter(
-    private val products: ArrayList<Product>
+    private val products: ArrayList<Product>,
+    private val actions: ListAction
 ) : RecyclerView.Adapter<ProductListAdapter.ProductViewHolder>() {
 
     fun updateProducts(newProducts: List<Product>) {
@@ -50,6 +51,8 @@ class ProductListAdapter(
             val resultDate = Date(product.updateTime)
             val lastUpdate = "Última atualização: ${sdf.format(resultDate)}" //TODO extract to string
             productDate.text = lastUpdate
+
+            productLayout.setOnClickListener { actions.onClick(product.id) }
         }
 
     }

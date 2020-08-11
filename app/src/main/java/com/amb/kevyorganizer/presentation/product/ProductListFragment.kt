@@ -9,18 +9,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.amb.kevyorganizer.R
 import com.amb.kevyorganizer.data.ProductListViewModel
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_product_list.*
 
-class ProductListFragment : Fragment() {
+class ProductListFragment : Fragment(), ListAction {
 
-    private val productListView by lazy { view?.findViewById(R.id.productListView) as RecyclerView }
-    private val btnAddProduct by lazy { view?.findViewById(R.id.btnAddProduct) as FloatingActionButton }
-
-    private val productListAdapter = ProductListAdapter(arrayListOf())
+    private val productListAdapter = ProductListAdapter(arrayListOf(), this)
     private lateinit var viewModel: ProductListViewModel
 
     override fun onCreateView(
@@ -67,8 +62,12 @@ class ProductListFragment : Fragment() {
     }
 
     private fun goToProductDetails(id: Long = 0) {
-        val action = ProductListFragmentDirections.actionGoToProduct()
+        val action = ProductListFragmentDirections.actionGoToProduct(id)
         Navigation.findNavController(productListView).navigate(action)
+    }
+
+    override fun onClick(id: Long) {
+        goToProductDetails(id)
     }
 
 }

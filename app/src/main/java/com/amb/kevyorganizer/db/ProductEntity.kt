@@ -36,6 +36,7 @@ data class ProductEntity(
         const val TABLE_NAME = "product"
 
         fun fromProduct(product: Product) = ProductEntity(
+            id = product.id,
             name = product.name,
             ammount = product.ammount,
             price = product.price,
