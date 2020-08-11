@@ -12,12 +12,16 @@
         tools:layout="@layout/fragment_product_list">
         <action
             android:id="@+id/actionGoToProduct"
-            app:destination="@id/addProductFragment" />
+            app:destination="@id/productDetailsFragment">
+            <argument
+                android:name="productId"
+                app:argType="long" />
+        </action>
     </fragment>
 
     <fragment
-        android:id="@+id/addProductFragment"
-        android:name="com.amb.kevyorganizer.presentation.product.AddProductFragment"
+        android:id="@+id/productDetailsFragment"
+        android:name="com.amb.kevyorganizer.presentation.product.ProductDetailsFragment"
         android:label="fragment_add_product"
         tools:layout="@layout/fragment_add_product">
         <argument
@@ -39,7 +43,7 @@
         android:label="CameraFragment">
         <action
             android:id="@+id/actionGoToProduct"
-            app:destination="@id/addProductFragment">
+            app:destination="@id/productDetailsFragment">
             <argument
                 android:name="productImageFile"
                 app:argType="string" />
