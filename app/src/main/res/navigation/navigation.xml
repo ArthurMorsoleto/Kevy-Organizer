@@ -34,20 +34,21 @@
             app:argType="string" />
         <action
             android:id="@+id/actionGoToCamera"
-            app:destination="@id/cameraFragment" />
+            app:destination="@id/cameraFragment">
+            <argument
+                android:name="productId"
+                app:argType="long" />
+        </action>
     </fragment>
 
     <fragment
         android:id="@+id/cameraFragment"
         android:name="com.amb.kevyorganizer.presentation.camera.CameraFragment"
         android:label="CameraFragment">
-        <action
-            android:id="@+id/actionGoToProduct"
-            app:destination="@id/productDetailsFragment">
-            <argument
-                android:name="productImageFile"
-                app:argType="string" />
-        </action>
+        <argument
+            android:name="currentProductId"
+            android:defaultValue="0L"
+            app:argType="long" />
     </fragment>
 
 </navigation>

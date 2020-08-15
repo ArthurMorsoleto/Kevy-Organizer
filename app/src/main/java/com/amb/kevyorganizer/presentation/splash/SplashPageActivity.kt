@@ -36,7 +36,6 @@ class SplashPageActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val SPLASH_TIME_OUT = 1500L
         const val SPLASH_ANIMATION_PATH = "cubes_isometric.json"
     }
 }

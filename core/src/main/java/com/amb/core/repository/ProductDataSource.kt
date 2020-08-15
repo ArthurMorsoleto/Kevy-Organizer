@@ -11,4 +11,6 @@ interface ProductDataSource {
     suspend fun getAll(): List<Product>
 
     suspend fun remove(product: Product)
+
+    suspend fun updateProductPhoto(id: Long, filePath: String)
 }

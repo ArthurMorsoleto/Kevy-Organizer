@@ -6,16 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import com.amb.camera.KevyCameraView
 import com.amb.kevyorganizer.R
+import com.amb.kevyorganizer.data.CameraFragmentViewModel
 import kotlinx.android.synthetic.main.fragment_camera.*
 
 class CameraFragment : Fragment() {
 
     private val captureButton by lazy { view?.findViewById(R.id.captureButton) as ImageView }
     private val kevyCameraView by lazy { view?.findViewById(R.id.kevyCameraView) as KevyCameraView }
-    private lateinit var onCaptureSuccessListener: CameraAction
+
+    private var currentProductId: Long = 0L
+    private lateinit var viewModel: CameraFragmentViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,8 +30,16 @@ class CameraFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProviders.of(this).get(CameraFragmentViewModel::class.java)
         startCamera()
         setupCaptureButton()
+        getProductFromArguments()
+    }
+
+    private fun getProductFromArguments() {
+        arguments?.let {
+            currentProductId = CameraFragmentArgs.fromBundle(it).currentProductId
+        }
     }
 
     override fun onDetach() {
@@ -51,40 +63,16 @@ class CameraFragment : Fragment() {
     }
 
     private fun handleOnCaptureSuccess(path: String) {
-        onCaptureSuccessListener.onCaptureSuccess(path)
+        viewModel.updateProductPhoto(currentProductId, path)
+        popBackStack()
     }
 
     private fun popBackStack() {
         Navigation.findNavController(cameraRoot).popBackStack()
     }
 
-    fun setCaptureSuccessListener(listener: CameraAction) {
-        onCaptureSuccessListener = listener
-    }
-
     companion object {
         const val FOLDER_NAME = "KevyOrganizerFolder"
-        private const val PERMISSION_REQUEST_CODE = 200
     }
-
-
-    //todo
-    //https://stackoverflow.com/questions/50754523/how-to-get-a-result-from-fragment-using-navigation-architecture-component
-//    If navigating from Fragment A to Fragment B and A needs a result from B:
-//
-//    findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Type>("key")?.observe(viewLifecycleOwner) {result ->
-//        // Do something with the result.
-//    }
-//    If on Fragment B and need to set the result:
-//
-//    findNavController().previousBackStackEntry?.savedStateHandle?.set("key", result)
-//    I ended up creating two extensions for this:
-//
-//    fun Fragment.getNavigationResult(key: String = "result") =
-//        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>(key)
-//
-//    fun Fragment.setNavigationResult(result: String, key: String = "result") {
-//        findNavController().previousBackStackEntry?.savedStateHandle?.set(key, result)
-//    }
 
 }

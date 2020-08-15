@@ -28,14 +28,12 @@ import androidx.navigation.fragment.navArgs
 import com.amb.core.data.Product
 import com.amb.kevyorganizer.R
 import com.amb.kevyorganizer.data.ProductDetailsViewModel
-import com.amb.kevyorganizer.presentation.camera.CameraAction
-import com.amb.kevyorganizer.presentation.camera.CameraFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
 import java.io.FileInputStream
 
-class ProductDetailsFragment : Fragment(), CameraAction {
+class ProductDetailsFragment : Fragment() {
 
     private val addProductRoot by lazy { view?.findViewById(R.id.addProductRoot) as ConstraintLayout }
     private val ivProduct by lazy { view?.findViewById(R.id.ivProduct) as ImageView }
@@ -75,6 +73,13 @@ class ProductDetailsFragment : Fragment(), CameraAction {
         observeViewModel()
         getProductFromArguments()
         initView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (productId != 0L) {
+            viewModel.getProduct(productId)
+        }
     }
 
     private fun getProductFromArguments() {
@@ -148,26 +153,12 @@ class ProductDetailsFragment : Fragment(), CameraAction {
         ivProduct.apply {
             setOnClickListener {
                 if (checkCameraPermission()) {
-                    setupCaptureSuccessListener()
-                    goToCamera() //todo fix when updating photo
+                    goToCamera()
                 } else {
                     requestCameraPermission()
                 }
             }
-            if (args.productImageFile.isNotBlank()) {
-                currentProduct.imageFilePath = args.productImageFile
-                this.setImageBitmap(getBitmap(args.productImageFile))
-            }
         }
-    }
-
-    private fun setupCaptureSuccessListener() {
-        val fragment: CameraFragment = CameraFragment()
-        fragment.setCaptureSuccessListener(object : CameraAction {
-            override fun onCaptureSuccess(filePath: String) {
-                print(filePath)
-            }
-        })
     }
 
     private fun saveCurrentProduct() {
@@ -198,7 +189,7 @@ class ProductDetailsFragment : Fragment(), CameraAction {
     }
 
     private fun goToCamera() {
-        val option = ProductDetailsFragmentDirections.actionGoToCamera()
+        val option = ProductDetailsFragmentDirections.actionGoToCamera(currentProduct.id)
         Navigation.findNavController(addProductRoot).navigate(option)
     }
 
@@ -251,10 +242,6 @@ class ProductDetailsFragment : Fragment(), CameraAction {
 
     companion object {
         const val PERMISSION_REQUEST_CODE = 200
-    }
-
-    override fun onCaptureSuccess(filePath: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }
