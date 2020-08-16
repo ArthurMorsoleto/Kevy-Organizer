@@ -72,6 +72,9 @@ class ProductDetailsFragment : Fragment() {
         super.onResume()
         if (productId != 0L) {
             viewModel.getProduct(productId)
+        } else {
+            loadingView.visibility = View.GONE
+            svProductDetails.visibility = View.VISIBLE
         }
     }
 
@@ -80,6 +83,9 @@ class ProductDetailsFragment : Fragment() {
             productId = ProductDetailsFragmentArgs.fromBundle(it).productId
             if (productId != 0L) {
                 viewModel.getProduct(productId)
+            } else {
+                loadingView.visibility = View.GONE
+                svProductDetails.visibility = View.VISIBLE
             }
         }
     }

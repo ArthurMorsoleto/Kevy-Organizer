@@ -49,7 +49,7 @@ class ProductListAdapter(
             productAmount.text = "Quantidade: ${product.amount}"
 
             if (product.imageFilePath.isNotBlank()) {
-                productImage.setImageBitmap(getBitmap(product.imageFilePath))
+//                productImage.setImageBitmap(getBitmap(product.imageFilePath))
             }
 
             val sdf = SimpleDateFormat("dd/MM-HH:mm", Locale.getDefault())
