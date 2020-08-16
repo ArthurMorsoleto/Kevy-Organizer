@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_kevy_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".presentation.camera.CameraActivity" />
         <activity android:name=".presentation.splash.SplashPageActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -38,7 +38,7 @@ data class ProductEntity(
         fun fromProduct(product: Product) = ProductEntity(
             id = product.id,
             name = product.name,
-            ammount = product.ammount,
+            ammount = product.amount,
             price = product.price,
             description = product.description,
             imageFilePath = product.imageFilePath,
@@ -50,7 +50,7 @@ data class ProductEntity(
     fun toProduct() = Product(
         id = id,
         name = name,
-        ammount = ammount,
+        amount = ammount,
         price = price,
         imageFilePath = imageFilePath,
         description = description,

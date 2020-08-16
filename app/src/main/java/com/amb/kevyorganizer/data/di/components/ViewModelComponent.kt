@@ -1,6 +1,5 @@
 package com.amb.kevyorganizer.data.di.components
 
-import com.amb.kevyorganizer.data.CameraFragmentViewModel
 import com.amb.kevyorganizer.data.ProductDetailsViewModel
 import com.amb.kevyorganizer.data.ProductListViewModel
 import com.amb.kevyorganizer.data.di.AppModule
@@ -14,6 +13,4 @@ interface ViewModelComponent {
     fun inject(productDetailsViewModel: ProductDetailsViewModel)
 
     fun inject(productListViewModel: ProductListViewModel)
-
-    fun inject(cameraFragmentViewModel: CameraFragmentViewModel)
 }

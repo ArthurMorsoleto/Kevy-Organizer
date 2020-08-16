@@ -26,8 +26,4 @@ class RoomProductDataSource(context: Context) : ProductDataSource {
         return productDao.deleteProductEntity(ProductEntity.fromProduct(product))
     }
 
-    override suspend fun updateProductPhoto(id: Long, filePath: String) {
-        return productDao.updateProductPhoto(id, filePath)
-    }
-
 }

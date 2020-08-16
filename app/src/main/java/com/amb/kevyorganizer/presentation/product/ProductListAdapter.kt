@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amb.core.data.Product
 import com.amb.kevyorganizer.R
+import com.amb.kevyorganizer.presentation.getBitmap
 import kotlinx.android.synthetic.main.item_product.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -45,9 +46,13 @@ class ProductListAdapter(
         fun bind(product: Product) {
             productName.text = product.name
             productPrice.text = product.price.toString()
-            productAmount.text = product.ammount.toString()
+            productAmount.text = "Quantidade: ${product.amount}"
 
-            val sdf = SimpleDateFormat("dd/MM, HH:mm:ss", Locale.getDefault())
+            if (product.imageFilePath.isNotBlank()) {
+                productImage.setImageBitmap(getBitmap(product.imageFilePath))
+            }
+
+            val sdf = SimpleDateFormat("dd/MM-HH:mm", Locale.getDefault())
             val resultDate = Date(product.updateTime)
             val lastUpdate = "Última atualização: ${sdf.format(resultDate)}" //TODO extract to string
             productDate.text = lastUpdate

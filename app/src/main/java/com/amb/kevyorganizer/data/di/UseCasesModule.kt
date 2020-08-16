@@ -20,6 +20,4 @@ class UseCasesModule {
     @Provides
     fun providesRemoveProductUseCase(repository: ProductRepository) = RemoveProductUseCase(repository)
 
-    @Provides
-    fun providesUpdateProductPhotoUseCase(repository: ProductRepository) = UpdateProductPhotoUseCase(repository)
 }

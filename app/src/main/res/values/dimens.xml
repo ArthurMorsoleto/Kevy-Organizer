@@ -7,7 +7,8 @@
     <dimen name="size_80">80dp</dimen>
     <dimen name="size_120">120dp</dimen>
 
-    <dimen name="card_product_height">130dp</dimen>
+    <dimen name="card_product_height">150dp</dimen>
     <dimen name="card_product_radius">5dp</dimen>
     <dimen name="card_product_elevation">2dp</dimen>
+    <dimen name="card_product_photo_radius">250dp</dimen>
 </resources>

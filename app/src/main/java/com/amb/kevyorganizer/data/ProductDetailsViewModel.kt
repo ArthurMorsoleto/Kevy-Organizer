@@ -42,6 +42,10 @@ class ProductDetailsViewModel(application: Application) : AndroidViewModel(appli
         get() = _currentProduct
     private val _currentProduct = MutableLiveData<Product?>()
 
+    val loading: MutableLiveData<Boolean>
+        get() = _loading
+    private val _loading = MutableLiveData<Boolean>()
+
     fun saveProduct(product: Product) {
         coroutineScope.launch {
             addProductUseCase(product)
@@ -50,9 +54,11 @@ class ProductDetailsViewModel(application: Application) : AndroidViewModel(appli
     }
 
     fun getProduct(id: Long) {
+        _loading.postValue(true)
         coroutineScope.launch {
             val product = getProductUseCase(id)
             _currentProduct.postValue(product)
+            _loading.postValue(false)
         }
     }
 

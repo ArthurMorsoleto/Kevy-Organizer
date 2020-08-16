@@ -12,5 +12,4 @@ interface ProductDataSource {
 
     suspend fun remove(product: Product)
 
-    suspend fun updateProductPhoto(id: Long, filePath: String)
 }

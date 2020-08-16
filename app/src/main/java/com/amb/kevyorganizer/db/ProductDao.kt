@@ -20,7 +20,4 @@ interface ProductDao {
 
     @Query("SELECT * FROM $TABLE_NAME")
     suspend fun getAllProductsEntities(): List<ProductEntity>
-
-    @Query("UPDATE $TABLE_NAME SET image_file=:filePath WHERE id = :id")
-    suspend fun updateProductPhoto(id: Long, filePath: String)
 }

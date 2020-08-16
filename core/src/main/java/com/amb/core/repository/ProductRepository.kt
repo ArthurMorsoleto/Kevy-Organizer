@@ -11,6 +11,4 @@ class ProductRepository(private val dataSource: ProductDataSource) {
     suspend fun getAllProducts() = dataSource.getAll()
 
     suspend fun removeProduct(product: Product) = dataSource.remove(product)
-
-    suspend fun updateProductPhoto(id: Long, filePath: String) = dataSource.updateProductPhoto(id, filePath)
 }
