@@ -4,4 +4,7 @@
     <string name="product_name">Nome do Produto</string>
     <string name="product_description">Descrição</string>
     <string name="product_price">Digite o preço</string>
+
+    <string name="product_amount">Quantidade: %1$s</string>
+    <string name="product_date">Atualizado em: %1$s</string>
 </resources>

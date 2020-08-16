@@ -22,8 +22,9 @@ import com.amb.core.data.Product
 import com.amb.kevyorganizer.R
 import com.amb.kevyorganizer.data.ProductDetailsViewModel
 import com.amb.kevyorganizer.presentation.camera.CameraActivity
-import com.amb.kevyorganizer.presentation.getBitmap
+import com.amb.kevyorganizer.presentation.getProgressDrawable
 import com.amb.kevyorganizer.presentation.hideKeyboard
+import com.amb.kevyorganizer.presentation.loadImage
 import com.amb.kevyorganizer.presentation.showSnackBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -124,7 +125,7 @@ class ProductDetailsFragment : Fragment() {
         edtProductPrice.setText(currentProduct.price.toString(), TextView.BufferType.EDITABLE)
         edtProductDescription.setText(currentProduct.description, TextView.BufferType.EDITABLE)
         npProductAmount.value = currentProduct.amount.toInt()
-        ivProduct.setImageBitmap(getBitmap(currentProduct.imageFilePath))
+        activity?.applicationContext?.let { ivProduct.loadImage(currentProduct.imageFilePath, getProgressDrawable(it)) }
     }
 
     private fun deleteCurrentProduct() {
@@ -227,7 +228,7 @@ class ProductDetailsFragment : Fragment() {
             val imgFilePath = data?.getStringExtra(CAMERA_KEY)
             imgFilePath?.let {
                 currentProduct.imageFilePath = imgFilePath
-                ivProduct.setImageBitmap(getBitmap(imgFilePath))
+                activity?.applicationContext?.let { ivProduct.loadImage(imgFilePath, getProgressDrawable(it)) }
             }
         }
     }
