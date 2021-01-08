@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amb.core.data.Product
 import com.amb.kevyorganizer.R
+import com.amb.kevyorganizer.presentation.getProgressDrawable
+import com.amb.kevyorganizer.presentation.loadImage
 import kotlinx.android.synthetic.main.item_product.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -37,19 +39,23 @@ class ProductListAdapter(
 
         private val productLayout = view.productItemLayout
         private val productName = view.tvProductName
-        private val productImage = view.ivProductImage //todo handle image
+        private val productImage = view.ivProductImage
         private val productPrice = view.tvProducPrice
-        private val productAmount = view.tvProductAmount //todo ajust layout
+        private val productAmount = view.tvProductAmount
         private val productDate = view.tvProductDate
 
         fun bind(product: Product) {
             productName.text = product.name
             productPrice.text = product.price.toString()
-            productAmount.text = product.ammount.toString()
+            productAmount.text = this.itemView.context.getString(R.string.product_amount, product.amount.toString())
 
-            val sdf = SimpleDateFormat("dd/MM, HH:mm:ss", Locale.getDefault())
+            if (product.imageFilePath.isNotBlank()) {
+                productImage.loadImage(product.imageFilePath, getProgressDrawable(this.itemView.context))
+            }
+
+            val sdf = SimpleDateFormat("dd/MM-HH:mm", Locale.getDefault())
             val resultDate = Date(product.updateTime)
-            val lastUpdate = "Última atualização: ${sdf.format(resultDate)}" //TODO extract to string
+            val lastUpdate = this.itemView.context.getString(R.string.product_date, sdf.format(resultDate))
             productDate.text = lastUpdate
 
             productLayout.setOnClickListener { actions.onClick(product.id) }

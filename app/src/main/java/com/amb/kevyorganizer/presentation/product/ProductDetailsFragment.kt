@@ -2,20 +2,14 @@ package com.amb.kevyorganizer.presentation.product
 
 import android.Manifest
 import android.content.Context
-import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.NumberPicker
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
@@ -24,18 +18,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.navArgs
 import com.amb.core.data.Product
 import com.amb.kevyorganizer.R
 import com.amb.kevyorganizer.data.ProductDetailsViewModel
-import com.amb.kevyorganizer.presentation.camera.CameraAction
-import com.amb.kevyorganizer.presentation.camera.CameraFragment
+import com.amb.kevyorganizer.presentation.camera.CameraActivity
+import com.amb.kevyorganizer.presentation.getProgressDrawable
+import com.amb.kevyorganizer.presentation.hideKeyboard
+import com.amb.kevyorganizer.presentation.loadImage
+import com.amb.kevyorganizer.presentation.showSnackBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import java.io.File
-import java.io.FileInputStream
 
-class ProductDetailsFragment : Fragment(), CameraAction {
+class ProductDetailsFragment : Fragment() {
 
     private val addProductRoot by lazy { view?.findViewById(R.id.addProductRoot) as ConstraintLayout }
     private val ivProduct by lazy { view?.findViewById(R.id.ivProduct) as ImageView }
@@ -45,16 +38,15 @@ class ProductDetailsFragment : Fragment(), CameraAction {
     private val npProductAmount by lazy { view?.findViewById(R.id.npProductAmount) as NumberPicker }
     private val btnSaveProduct by lazy { view?.findViewById(R.id.btnSaveProduct) as FloatingActionButton }
     private val btnDeleteProduct by lazy { view?.findViewById(R.id.btnDeleteProduct) as FloatingActionButton }
-    private val ivProductImage by lazy { view?.findViewById(R.id.ivProductImage) as ImageView }
-
-    private val args: ProductDetailsFragmentArgs by navArgs()
+    private val loadingView by lazy { view?.findViewById(R.id.loading) as ProgressBar }
+    private val svProductDetails by lazy { view?.findViewById(R.id.svProductDetails) as ScrollView }
 
     private lateinit var viewModel: ProductDetailsViewModel
 
     private var productId = 0L
     private var currentProduct = Product(
         name = "",
-        ammount = 0,
+        amount = 0,
         price = 0.0,
         imageFilePath = "",
         description = "",
@@ -77,11 +69,24 @@ class ProductDetailsFragment : Fragment(), CameraAction {
         initView()
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (productId != 0L) {
+            viewModel.getProduct(productId)
+        } else {
+            loadingView.visibility = View.GONE
+            svProductDetails.visibility = View.VISIBLE
+        }
+    }
+
     private fun getProductFromArguments() {
         arguments?.let {
             productId = ProductDetailsFragmentArgs.fromBundle(it).productId
             if (productId != 0L) {
                 viewModel.getProduct(productId)
+            } else {
+                loadingView.visibility = View.GONE
+                svProductDetails.visibility = View.VISIBLE
             }
         }
     }
@@ -96,11 +101,11 @@ class ProductDetailsFragment : Fragment(), CameraAction {
     private fun observeViewModel() {
         viewModel.saved.observe(this, Observer { hasSaved ->
             if (hasSaved) {
-                showSnackBar("Produto Salvo")
-                hideKeyboard()
+                showSnackBar("Produto Salvo", addProductRoot) //todo extract string
+                context?.let { hideKeyboard(it, addProductRoot) }
                 popBackStack()
             } else {
-                showSnackBar("Algo deu errado")
+                showSnackBar("Algo deu errado", addProductRoot) //todo extract string
             }
         })
         viewModel.currentProduct.observe(this, Observer { product ->
@@ -109,15 +114,18 @@ class ProductDetailsFragment : Fragment(), CameraAction {
                 bindCurrentProduct()
             }
         })
+        viewModel.loading.observe(this, Observer { loading ->
+            loadingView.visibility = if (loading) View.VISIBLE else View.GONE
+            svProductDetails.visibility = if (loading) View.GONE else View.VISIBLE
+        })
     }
 
     private fun bindCurrentProduct() {
         edtProductName.setText(currentProduct.name, TextView.BufferType.EDITABLE)
         edtProductPrice.setText(currentProduct.price.toString(), TextView.BufferType.EDITABLE)
         edtProductDescription.setText(currentProduct.description, TextView.BufferType.EDITABLE)
-        npProductAmount.value = currentProduct.ammount.toInt()
-        val productBitmap = getBitmap(currentProduct.imageFilePath)
-        productBitmap?.let { ivProductImage.setImageBitmap(it) }
+        npProductAmount.value = currentProduct.amount.toInt()
+        activity?.applicationContext?.let { ivProduct.loadImage(currentProduct.imageFilePath, getProgressDrawable(it)) }
     }
 
     private fun deleteCurrentProduct() {
@@ -126,9 +134,8 @@ class ProductDetailsFragment : Fragment(), CameraAction {
 
     private fun setupAmountNumberPicker() {
         npProductAmount.apply {
-            minValue = 1
-            maxValue = 100
-            value = 1
+            minValue = MIN_AMOUNT_VALUE
+            maxValue = MAX_AMOUNT_VALUE
         }
     }
 
@@ -148,32 +155,20 @@ class ProductDetailsFragment : Fragment(), CameraAction {
         ivProduct.apply {
             setOnClickListener {
                 if (checkCameraPermission()) {
-                    setupCaptureSuccessListener()
-                    goToCamera() //todo fix when updating photo
+                    goToCamera()
                 } else {
                     requestCameraPermission()
                 }
             }
-            if (args.productImageFile.isNotBlank()) {
-                currentProduct.imageFilePath = args.productImageFile
-                this.setImageBitmap(getBitmap(args.productImageFile))
-            }
         }
-    }
-
-    private fun setupCaptureSuccessListener() {
-        val fragment: CameraFragment = CameraFragment()
-        fragment.setCaptureSuccessListener(object : CameraAction {
-            override fun onCaptureSuccess(filePath: String) {
-                print(filePath)
-            }
-        })
     }
 
     private fun saveCurrentProduct() {
         val time = System.currentTimeMillis()
         currentProduct.name = edtProductName.text.toString()
         currentProduct.price = edtProductPrice.text.toString().toDouble()
+        currentProduct.description = edtProductDescription.text.toString()
+        currentProduct.amount = npProductAmount.value.toLong()
         currentProduct.updateTime = time
         if (currentProduct.id == 0L) {
             currentProduct.creationTime = time
@@ -184,7 +179,7 @@ class ProductDetailsFragment : Fragment(), CameraAction {
     private fun buildDeleteAlertDialog(context: Context) {
         if (productId != 0L) {
             AlertDialog.Builder(context)
-                .setTitle("Excluir Produto")
+                .setTitle("Excluir Produto") //todo extract strings
                 .setMessage("Tem certeza que deseja excluir o produto ${currentProduct.name}?")
                 .setPositiveButton("Sim") { dialog: DialogInterface?, i: Int -> deleteCurrentProduct() }
                 .setNegativeButton("Não") { dialog: DialogInterface?, _ -> }
@@ -198,29 +193,7 @@ class ProductDetailsFragment : Fragment(), CameraAction {
     }
 
     private fun goToCamera() {
-        val option = ProductDetailsFragmentDirections.actionGoToCamera()
-        Navigation.findNavController(addProductRoot).navigate(option)
-    }
-
-    private fun getBitmap(path: String): Bitmap? {
-        var bitmap: Bitmap? = null
-        try {
-            val options = BitmapFactory.Options()
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888
-            bitmap = BitmapFactory.decodeStream(FileInputStream(File(path)), null, options)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return bitmap
-    }
-
-    private fun showSnackBar(text: String) {
-        Snackbar.make(addProductRoot, text, Snackbar.LENGTH_SHORT).show()
-    }
-
-    private fun hideKeyboard() {
-        val inputMethodManager = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(addProductRoot.windowToken, 0)
+        startActivityForResult(Intent(activity, CameraActivity::class.java), CAMERA_REQUEST_CODE)
     }
 
     private fun checkCameraPermission(): Boolean {
@@ -249,12 +222,23 @@ class ProductDetailsFragment : Fragment(), CameraAction {
         }
     }
 
-    companion object {
-        const val PERMISSION_REQUEST_CODE = 200
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == CAMERA_REQUEST_CODE) {
+            val imgFilePath = data?.getStringExtra(CAMERA_KEY)
+            imgFilePath?.let {
+                currentProduct.imageFilePath = imgFilePath
+                activity?.applicationContext?.let { ivProduct.loadImage(imgFilePath, getProgressDrawable(it)) }
+            }
+        }
     }
 
-    override fun onCaptureSuccess(filePath: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    companion object {
+        const val PERMISSION_REQUEST_CODE = 200
+        const val CAMERA_REQUEST_CODE = 205
+        const val CAMERA_KEY = "CAMERA_FILE_PATH"
+        const val MIN_AMOUNT_VALUE = 1
+        const val MAX_AMOUNT_VALUE = 100
     }
 
 }

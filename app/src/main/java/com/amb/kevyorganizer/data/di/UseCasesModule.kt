@@ -1,10 +1,7 @@
 package com.amb.kevyorganizer.data.di
 
 import com.amb.core.repository.ProductRepository
-import com.amb.core.usecase.AddProductUseCase
-import com.amb.core.usecase.GetAllProductsUseCase
-import com.amb.core.usecase.GetProductUseCase
-import com.amb.core.usecase.RemoveProductUseCase
+import com.amb.core.usecase.*
 import dagger.Module
 import dagger.Provides
 
@@ -22,4 +19,5 @@ class UseCasesModule {
 
     @Provides
     fun providesRemoveProductUseCase(repository: ProductRepository) = RemoveProductUseCase(repository)
+
 }
